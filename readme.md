@@ -5,6 +5,14 @@ Kamera USB/webcam digunakan untuk mendeteksi benda (misal: tabung besi) secara r
 
 ---
 
+### Clone repo
+
+```bash
+git clone https://github.com/fafnir96/cylinder-object-robot.git
+```
+
+---
+
 ## 🖥️ Step by Step — Windows
 
 ### 1️⃣ Clone repo YOLOv5
