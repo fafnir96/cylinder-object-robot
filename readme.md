@@ -25,15 +25,7 @@ venv\Scripts\activate
 
 ---
 
-### 3️⃣ Install PyTorch + CUDA (RTX 4060)
-
-```bash
-pip install torch==2.2.2+cu121 torchvision==0.17.2+cu121 torchaudio==2.2.2 --index-url https://download.pytorch.org/whl/cu121
-```
-
----
-
-### 4️⃣ Install dependencies YOLOv5
+### 3️⃣ Install dependencies YOLOv5
 
 ```bash
 pip install -r requirements.txt
@@ -42,7 +34,7 @@ pip install opencv-python
 
 ---
 
-### 5️⃣ Pastikan model best.pt sudah ada
+### 4️⃣ Pastikan model best.pt sudah ada
 
 ```
 runs/train/tabung_besi_v5n7/weights/best.pt
@@ -50,7 +42,7 @@ runs/train/tabung_besi_v5n7/weights/best.pt
 
 ---
 
-### 6️⃣ Jalankan deteksi.py
+### 5️⃣ Jalankan deteksi.py
 
 ```bash
 python deteksi.py
@@ -137,14 +129,6 @@ cv2.destroyAllWindows()
 ✅ Kamera USB support (720p / 1080p)  
 ✅ Webcam index `cv2.VideoCapture(0)` — kalau ada lebih dari 1 webcam, coba ubah `0` ke `1` atau `2`  
 ✅ Python 3.9 / 3.10 lebih aman  
-✅ Model YOLOv5 hasil training pakai `train.py` YOLOv5  
+✅ Model YOLOv5 hasil training pakai `train.py` YOLOv5
 
 ---
-
-## 🚀 Author
-
-Irfan Maulana — YOLOv5 + Robot Arm Project  
-Gunadarma University
-
----
-
