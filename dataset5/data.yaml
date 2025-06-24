@@ -1,0 +1,14 @@
+path: C:\Users\Axioo Pongo\Documents\Pengembangan Diri\Yolo\Shape\dataset5
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 1
+names: ["Cylinder"]
+
+roboflow:
+  workspace: vision-party
+  project: cylinder-detection-xehw2
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/vision-party/cylinder-detection-xehw2/dataset/1
