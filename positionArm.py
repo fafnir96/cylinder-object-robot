@@ -4,10 +4,10 @@ import serial
 import time
 import numpy as np
 
-from yolov7.utils.datasets import letterbox
-from yolov7.utils.general import non_max_suppression, scale_coords
-from yolov7.utils.plots import plot_one_box
-from yolov7.models.experimental import attempt_load
+from utils.datasets import letterbox
+from utils.general import non_max_suppression, scale_coords
+from utils.plots import plot_one_box
+from models.experimental import attempt_load
 
 # =============================
 # Inisialisasi Model YOLOv7
