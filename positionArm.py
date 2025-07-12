@@ -13,7 +13,7 @@ from models.experimental import attempt_load
 # Inisialisasi Model YOLOv7
 # =============================
 
-weights_path = 'runs/train/exp/weights/best.pt'  # Path model hasil training
+weights_path = 'runs/train/tiny-100epoch/weights/best.pt'  # Path model hasil training
 img_size = 416
 conf_thres = 0.4
 iou_thres = 0.45
@@ -26,11 +26,12 @@ model.eval()
 # Inisialisasi Serial Robot
 # =============================
 
-ser = serial.Serial('/dev/ttyUSB0', 115200, timeout=1)  # ganti COM4
+ser = serial.Serial('COM9', 115200, timeout=1)  # ganti COM4
 
 # =============================
 # Fungsi Kontrol Robot
 # =============================
+time.sleep(1)
 
 def wait_complete_robot():
     while True:
@@ -42,6 +43,7 @@ def wait_complete_robot():
 def calibrate():
     ser.write(b'G28\r')
     wait_complete_robot()
+    pass
 
 def nonlogam():
     ser.write(b'G0 X0.00 Y216.90 Z130.00 E130.00 F0.00\r')
@@ -131,19 +133,47 @@ def detect_cylinder(frame):
 calibrate()
 cap = cv2.VideoCapture(0)
 
+state              = "IDLE"          # {IDLE, WAIT_MAT}
+ts_cylinder_seen   = 0.0
+pending_material   = ""              # "LOGAM"/"NON"
+DELAY_WAIT_MATERIAL    = 7.0 
+
 while True:
     ret, frame = cap.read()
     if not ret:
         break
 
-    if detect_cylinder(frame):
+    cylinder_now = detect_cylinder(frame)
+
+    if state == "IDLE":
+        if cylinder_now:
+            ts_cylinder_seen = time.time()
+            state = "WAIT_MAT"
+            pending_material = ""
+
+    elif state == "WAIT_MAT":
         if ser.in_waiting:
-            line = ser.readline().decode('utf-8').strip()
-            print("Serial Data:", line)
-            if "LOGAM" in line:
+            line = ser.readline().decode('utf-8', errors='ignore').strip()
+            print("Serial:", line)
+            if   "LOGAM" in line: pending_material = "LOGAM"
+            elif "NON"  in line: pending_material = "NON"
+
+        elapsed = time.time() - ts_cylinder_seen
+
+        # jika material datang dalam batas waktu
+        if pending_material and elapsed <= DELAY_WAIT_MATERIAL:
+            if pending_material == "LOGAM":
+                print("▶ Cylinder + LOGAM → gerak logam()")
                 logam()
-            elif "NON" in line:
+            else:
+                print("▶ Cylinder + NON  → gerak nonlogam()")
                 nonlogam()
+            state = "IDLE"
+
+        # jika waktu habis tanpa material
+        elif elapsed > DELAY_WAIT_MATERIAL:
+            print("⌛ Cylinder terdeteksi, tapi material tak muncul → abaikan")
+            state = "IDLE"
 
     cv2.imshow('Deteksi', frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
